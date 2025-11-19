@@ -3,7 +3,7 @@ import './App.css'
 import { Auth } from './components/auth'
 import { db } from './config/firebase-config'
 // import { getFirestore } from 'firebase/firestore';
-import { /*getFirestore,*/ getDocs, collection, addDoc } from 'firebase/firestore';
+import { /*getFirestore,*/ getDocs, collection, addDoc, deleteDoc, doc } from 'firebase/firestore';
 
 function App() {
 
@@ -32,6 +32,16 @@ function App() {
     } catch (error) {
       console.log(`There has been and error getting db: ${error}`);
       
+    }
+  }
+
+  const deleteMovie = async (id) => {
+    try {
+      const movieDoc = doc(db, "movies", id);
+      await deleteDoc(movieDoc);
+      getMovieList();
+    } catch (error) {
+      console.log(error)
     }
   }
 
@@ -77,6 +87,8 @@ function App() {
           <div key={movie.id}>
             <h1 style={{color: movie.receivedAnOscar ? "green" : "red"}}>{movie.title}</h1>
             <p>Date: {movie.releaseDate}</p>
+
+            <button onClick={() => deleteMovie(movie.id)}>Delete Movie</button>
           </div>
         ))}
       </div>
