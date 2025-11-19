@@ -9,6 +9,11 @@ function App() {
 
   const [movieList, setMovieList] = useState([]);
 
+  // New movie states
+  const [newMovieTitle, setNewMovieTitle] = useState("");
+  const [newReleaseDate, setnewReleaseDate] = useState("");
+  const [isNewMovieOscar, setIsNewMovieOscar] = useState("");
+
   const moviesCollectionRef = collection(db, "movies");
 
   useEffect(() => {
@@ -36,6 +41,14 @@ function App() {
   return (
     <div className="App">
       <Auth />
+
+      <div>
+        <input type="text" placeholder='Movie title...' onChange={(e) => setNewMovieTitle(e.target.value)}/>
+        <input type="number" placeholder='Release date...' onChange={(e) => setnewReleaseDate(Number(e.target.value))}/>
+        <input type="checkbox" checked={isNewMovieOscar} onChange={(e) => setIsNewMovieOscar(e.target.checked)}/>
+        <label htmlFor="input">Received an Oscar</label>
+        <button>Submit Movie</button>
+      </div>
 
       <div>
         {movieList.map((movie) => (
