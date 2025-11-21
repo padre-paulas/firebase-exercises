@@ -11,6 +11,7 @@ export const Auth = () => {
   
 
   const signIn = async () => {
+    console.log(auth?.currentUser?.email);
     try {
       await createUserWithEmailAndPassword(auth, email, password);
     } catch (error) {
