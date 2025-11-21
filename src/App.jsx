@@ -3,7 +3,14 @@ import './App.css'
 import { Auth } from './components/auth'
 import { db } from './config/firebase-config'
 // import { getFirestore } from 'firebase/firestore';
-import { /*getFirestore,*/ getDocs, collection, addDoc, deleteDoc, doc } from 'firebase/firestore';
+import {
+  getDocs,
+  collection, 
+  addDoc,
+  deleteDoc, 
+  updateDoc,
+  doc 
+} from 'firebase/firestore';
 
 function App() {
 
@@ -14,6 +21,10 @@ function App() {
   const [newReleaseDate, setnewReleaseDate] = useState("");
   const [isNewMovieOscar, setIsNewMovieOscar] = useState("");
 
+  // Update title state
+  const [updatedTitle, setUpdatedTitle] = useState("");
+
+  
   const moviesCollectionRef = collection(db, "movies");
 
   const getMovieList = async () => {
@@ -43,6 +54,16 @@ function App() {
     } catch (error) {
       console.log(error)
     }
+  }
+
+  const updateTitle = async (id) => {
+    try {
+      const movieDoc = doc(db, "movies", id);
+      await updateDoc(movieDoc, {title: updatedTitle})
+      getMovieList();
+    } catch (error) {
+      console.log(error);
+    } 
   }
 
   useEffect(() => {
@@ -79,7 +100,7 @@ function App() {
         <input type="number" placeholder='Release date...' onChange={(e) => setnewReleaseDate(Number(e.target.value))}/>
         <input type="checkbox" checked={isNewMovieOscar} onChange={(e) => setIsNewMovieOscar(e.target.checked)}/>
         <label htmlFor="input">Received an Oscar</label>
-        <button onClick={onSubmitMovie}>Submit Movie</button>
+        <button onClick={() => onSubmitMovie}>Submit Movie</button>
       </div>
 
       <div>
@@ -89,6 +110,9 @@ function App() {
             <p>Date: {movie.releaseDate}</p>
 
             <button onClick={() => deleteMovie(movie.id)}>Delete Movie</button>
+
+            <input type="text" placeholder='new title' onChange={(e) =>setUpdatedTitle(e.target.value)}/>
+            <button onClick={() => updateTitle(movie.id)}>Update title</button>
           </div>
         ))}
       </div>
