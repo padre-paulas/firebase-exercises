@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 import { Auth } from './components/auth'
-import { db, auth } from './config/firebase-config'
+import { db, auth, /*storage*/ } from './config/firebase-config'
 // import { getFirestore } from 'firebase/firestore';
 import {
   getDocs,
@@ -23,6 +23,9 @@ function App() {
 
   // Update title state
   const [updatedTitle, setUpdatedTitle] = useState("");
+
+  // File apload state
+  const [fileUpload, setFileUpload] = useState(null);
 
   
   const moviesCollectionRef = collection(db, "movies");
@@ -64,6 +67,11 @@ function App() {
     } catch (error) {
       console.log(error);
     } 
+  }
+
+  const uploadFile = async () => {
+    if (!fileUpload) return;
+
   }
 
   useEffect(() => {
@@ -119,6 +127,12 @@ function App() {
           </div>
         ))}
       </div>
+
+        <div>
+          <input type="file" onChange={(event) => setFileUpload(event.target.files[0])}/>
+          <button onClick={uploadFile}>Upload File</button>
+        </div>
+
     </div>
   )
 }
